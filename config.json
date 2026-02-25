@@ -1,0 +1,156 @@
+{
+  "drinks": {
+    "beer": {
+      "name": "ビール",
+      "percentage": 5,
+      "glasses": {
+        "can": {
+          "name": "缶",
+          "ml": 350
+        },
+        "can-long": {
+          "name": "ロング缶",
+          "ml": 500
+        },
+        "glass": {
+          "name": "グラス",
+          "ml": 300
+        },
+        "joki": {
+          "name": "ジョッキ",
+          "ml": 500
+        },
+        "joki-large": {
+          "name": "大ジョッキ",
+          "ml": 600
+        }
+      }
+    },
+    "highball": {
+      "name": "ハイボール",
+      "percentage": 7,
+      "glasses": {
+        "glass": {
+          "name": "グラス",
+          "ml": 300
+        },
+        "glass-large": {
+          "name": "大グラス",
+          "ml": 400
+        },
+        "glass-long": {
+          "name": "ロンググラス",
+          "ml": 500
+        }
+      }
+    },
+    "sake": {
+      "name": "日本酒",
+      "percentage": 15,
+      "glasses": {
+        "tokuri": {
+          "name": "徳利",
+          "ml": 180
+        },
+        "mokkiri": {
+          "name": "もっきり",
+          "ml": 120
+        },
+        "ochoko": {
+          "name": "お猪口",
+          "ml": 30
+        }
+      }
+    },
+    "wine": {
+      "name": "ワイン",
+      "percentage": 12,
+      "glasses": {
+        "glass-small": {
+          "name": "グラス（小）",
+          "ml": 150
+        },
+        "glass-regular": {
+          "name": "グラス",
+          "ml": 200
+        },
+        "glass-large": {
+          "name": "グラス（大）",
+          "ml": 250
+        }
+      }
+    },
+    "shochu": {
+      "name": "焼酎",
+      "percentage": 20,
+      "glasses": {
+        "rock": {
+          "name": "ロック",
+          "ml": 200
+        },
+        "soda": {
+          "name": "ソーダ割",
+          "ml": 250
+        },
+        "ochoko": {
+          "name": "お猪口",
+          "ml": 30
+        }
+      }
+    },
+    "whisky": {
+      "name": "ウイスキー",
+      "percentage": 40,
+      "glasses": {
+        "single": {
+          "name": "シングル",
+          "ml": 30
+        },
+        "double": {
+          "name": "ダブル",
+          "ml": 60
+        },
+        "rock": {
+          "name": "ロック",
+          "ml": 45
+        }
+      }
+    }
+  },
+  "bac_stages": {
+    "0.00": {
+      "name": "通常",
+      "description": "酔いなし"
+    },
+    "0.02": {
+      "name": "爽快期",
+      "description": "気分が良くなる"
+    },
+    "0.05": {
+      "name": "ほろ酔い期",
+      "description": "顔が赤くなる、陽気になる"
+    },
+    "0.11": {
+      "name": "酩酊初期",
+      "description": "バランス感覚が悪くなる"
+    },
+    "0.16": {
+      "name": "酩酊極期",
+      "description": "思考・判断が低下"
+    },
+    "0.31": {
+      "name": "泥酔期",
+      "description": "動けない状態"
+    },
+    "0.41": {
+      "name": "昏睡期",
+      "description": "⚠️ 危険：医療対応が必要"
+    }
+  },
+  "gender_coefficient": {
+    "male": 0.7,
+    "female": 0.6
+  },
+  "elimination_rate_per_hour": 0.015,
+  "alcohol_density": 0.789
+}

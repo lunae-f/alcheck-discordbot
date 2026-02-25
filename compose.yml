@@ -1,0 +1,17 @@
+services:
+  alcheck-bot:
+    build: .
+    container_name: alcheck-discordbot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # データの永続化
+      - ./data:/app/data
+      # 設定ファイルの編集を反映
+      - ./config.json:/app/config.json:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
