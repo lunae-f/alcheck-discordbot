@@ -1,120 +1,134 @@
 {
+  "glasses": {
+    "short-can":    {"name": "ショート缶", "ml": 350},
+    "long-can":     {"name": "ロング缶", "ml": 500},
+    "middle-mug":   {"name": "中ジョッキ", "ml": 400},
+    "middle-mug-ice":{"name": "中ジョッキ", "ml": 350},
+    "large-mug":    {"name": "大ジョッキ", "ml": 800},
+    "large-mug-ice":{"name": "大ジョッキ", "ml": 600},
+    "tumbler":      {"name": "タンブラー", "ml": 300},
+    "glass":        {"name": "グラス", "ml": 200},
+    "glass-ice":    {"name": "グラス（ロック）", "ml": 90},
+    "1go-bottle":   {"name": "一合（カップ酒）", "ml": 180},
+    "2go-bottle":   {"name": "二合", "ml": 360},
+    "4go-bottle":   {"name": "四合", "ml": 720},
+    "1sho-bottle":  {"name": "一升", "ml": 1800},
+    "ochoko":       {"name": "お猪口", "ml": 40},
+    "tokkuri":      {"name": "徳利", "ml": 180},
+    "singleshot":   {"name": "シングルショット", "ml": 30},
+    "doubleshot":   {"name": "ダブルショット", "ml": 60},
+    "wine-glass":   {"name": "ワイングラス", "ml": 120},
+    "wine-bottle":  {"name": "ワインボトル（750mL）", "ml": 750},
+    "wine-bottle-250":{"name": "ワインボトル（250mL）", "ml": 250},
+    "wine-can":     {"name": "ワイン缶", "ml": 250}
+  },
   "drinks": {
+    "ultra-low": {
+      "name": "微アルコール系", "percentage": 1, 
+      "glass_types": [
+        "short-can",
+        "long-can"
+      ]
+    },
+    "chuhi-3": {
+      "name": "ほろよい系",
+      "percentage": 3,
+      "glass_types": [
+        "short-can",
+        "long-can"
+      ]
+    },
+    "chuhi-5": {
+      "name": "チューハイ系",
+      "percentage": 5,
+      "glass_types": [
+        "short-can",
+        "long-can",
+        "middle-mug-ice",
+        "large-mug-ice"
+      ]
+    },
+    "chuhi-7": {
+      "name": "チューハイ系",
+      "percentage": 7,
+      "glass_types": [
+        "short-can",
+        "long-can",
+        "middle-mug-ice",
+        "large-mug-ice"
+      ]
+    },
+    "strong": {
+      "name": "ストロング系",
+      "percentage": 9,
+      "glass_types": [
+        "short-can",
+        "long-can"
+      ]
+    },
     "beer": {
       "name": "ビール",
       "percentage": 5,
-      "glasses": {
-        "can": {
-          "name": "缶",
-          "ml": 350
-        },
-        "can-long": {
-          "name": "ロング缶",
-          "ml": 500
-        },
-        "glass": {
-          "name": "グラス",
-          "ml": 300
-        },
-        "joki": {
-          "name": "ジョッキ",
-          "ml": 500
-        },
-        "joki-large": {
-          "name": "大ジョッキ",
-          "ml": 600
-        }
-      }
-    },
-    "highball": {
-      "name": "ハイボール",
-      "percentage": 7,
-      "glasses": {
-        "glass": {
-          "name": "グラス",
-          "ml": 300
-        },
-        "glass-large": {
-          "name": "大グラス",
-          "ml": 400
-        },
-        "glass-long": {
-          "name": "ロンググラス",
-          "ml": 500
-        }
-      }
+      "glass_types": [
+        "short-can",
+        "long-can",
+        "middle-mug",
+        "large-mug"
+      ]
     },
     "sake": {
       "name": "日本酒",
       "percentage": 15,
-      "glasses": {
-        "tokuri": {
-          "name": "徳利",
-          "ml": 180
-        },
-        "mokkiri": {
-          "name": "もっきり",
-          "ml": 120
-        },
-        "ochoko": {
-          "name": "お猪口",
-          "ml": 30
-        }
-      }
+      "glass_types": [
+        "ochoko",
+        "tokkuri"
+      ]
+    },
+    "shochu-straight": {
+      "name": "焼酎（ストレート）",
+      "percentage": 22,
+      "glass_types": [
+        "glass-ice"
+      ]
+    },
+    "shochu-wari": {
+      "name": "焼酎（割り）",
+      "percentage": 10,
+      "glass_types": [
+        "glass"
+      ]
+    },
+    "kajitsu-shochu": {
+      "name": "果実酒・梅酒（ストレート）",
+      "percentage": 12,
+      "glass_types": [
+        "glass"
+      ]
+    },
+    "kajitsu-shochu-wari": {
+      "name": "果実酒・梅酒（割り）",
+      "percentage": 7,
+      "glass_types": [
+        "glass"
+      ]
     },
     "wine": {
       "name": "ワイン",
       "percentage": 12,
-      "glasses": {
-        "glass-small": {
-          "name": "グラス（小）",
-          "ml": 150
-        },
-        "glass-regular": {
-          "name": "グラス",
-          "ml": 200
-        },
-        "glass-large": {
-          "name": "グラス（大）",
-          "ml": 250
-        }
-      }
+      "glass_types": [
+        "wine-glass",
+        "wine-bottle",
+        "wine-bottle-250",
+        "wine-can"
+      ]
     },
-    "shochu": {
-      "name": "焼酎",
-      "percentage": 20,
-      "glasses": {
-        "rock": {
-          "name": "ロック",
-          "ml": 200
-        },
-        "soda": {
-          "name": "ソーダ割",
-          "ml": 250
-        },
-        "ochoko": {
-          "name": "お猪口",
-          "ml": 30
-        }
-      }
-    },
-    "whisky": {
-      "name": "ウイスキー",
+    "tequila": {
+      "name": "テキーラ",
       "percentage": 40,
-      "glasses": {
-        "single": {
-          "name": "シングル",
-          "ml": 30
-        },
-        "double": {
-          "name": "ダブル",
-          "ml": 60
-        },
-        "rock": {
-          "name": "ロック",
-          "ml": 45
-        }
-      }
+      "glass_types": [
+        "singleshot",
+        "doubleshot"
+      ]
     }
   },
   "bac_stages": {
@@ -148,8 +162,8 @@
     }
   },
   "gender_coefficient": {
-    "male": 0.7,
-    "female": 0.6
+    "male": 0.68,
+    "female": 0.55
   },
   "elimination_rate_per_hour": 0.015,
   "alcohol_density": 0.789

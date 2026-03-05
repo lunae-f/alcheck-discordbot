@@ -219,8 +219,9 @@ class AlcheckCog(commands.Cog):
         ml = None
         glass_name = None
         
-        if drink_info and glass in drink_info["glasses"]:
-            glass_info = drink_info["glasses"][glass]
+        # グローバルグラス定義から検索
+        if glass in self.config["glasses"]:
+            glass_info = self.config["glasses"][glass]
             glass_name = glass_info["name"]
             ml = glass_info["ml"]
         else:
@@ -279,9 +280,9 @@ class AlcheckCog(commands.Cog):
         
         # 警告表示
         if bac >= 0.31:
-            embed.set_footer(text="⚠️ 危険な状態です。飲酒を控え、必要に応じて医療機関に相談してください。")
+            embed.set_footer(text="⚠️ 危険な状態です。飲酒はやめ、必要に応じて医療機関に相談しましょう。")
         elif bac >= 0.16:
-            embed.set_footer(text="⚠️ かなり酔っています。これ以上の飲酒は控えましょう。")
+            embed.set_footer(text="⚠️ かなり酔っているようです。そろそろお開きにしませんか？")
         
         await interaction.response.send_message(embed=embed)
     
@@ -330,12 +331,16 @@ class AlcheckCog(commands.Cog):
         # お酒が選択されている場合、そのグラスオプションを表示
         if drink and drink in self.config["drinks"]:
             drink_info = self.config["drinks"][drink]
-            for key, value in drink_info["glasses"].items():
-                if current.lower() in key.lower() or current in value["name"]:
-                    choices.append(app_commands.Choice(
-                        name=f"{value['name']} ({value['ml']} mL)",
-                        value=key
-                    ))
+            # glass_types からグラス情報を取得
+            glass_types = drink_info.get("glass_types", [])
+            for glass_key in glass_types:
+                if glass_key in self.config["glasses"]:
+                    glass_info = self.config["glasses"][glass_key]
+                    if current.lower() in glass_key.lower() or current in glass_info["name"]:
+                        choices.append(app_commands.Choice(
+                            name=f"{glass_info['name']} ({glass_info['ml']} mL)",
+                            value=glass_key
+                        ))
         
         # 数値入力のヒント
         if current.replace('.', '').isdigit():
