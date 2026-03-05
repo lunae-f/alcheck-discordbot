@@ -177,7 +177,7 @@ class AlcheckCog(commands.Cog):
         embed.add_field(name="性別", value=gender_display, inline=True)
         embed.add_field(name="体重", value=f"{weight} kg", inline=True)
         
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
     
     @app_commands.command(name="alcheck", description="飲んだアルコールを記録します")
     @app_commands.describe(
@@ -296,7 +296,7 @@ class AlcheckCog(commands.Cog):
         elif bac >= 0.16:
             embed.set_footer(text="⚠️ かなり酔っているようです。そろそろお開きにしませんか？")
         
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
     
     @app_commands.command(name="alcheck-now", description="現在の血中アルコール濃度を表示します")
     async def alcheck_now(self, interaction: discord.Interaction):
@@ -375,7 +375,7 @@ class AlcheckCog(commands.Cog):
         elif bac >= 0.16:
             embed.set_footer(text="⚠️ かなり酔っているようです。そろそろお開きにしませんか？")
         
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
     
     @alcheck.autocomplete('drink')
     async def drink_autocomplete(
