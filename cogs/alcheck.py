@@ -20,7 +20,6 @@ class AlcheckCog(commands.Cog):
         self.bot = bot
         self.config = bot.config
         self.data_file = bot.data_dir / 'users.json'
-        self.users_data = self._load_users_data()
         
     def _load_users_data(self) -> dict:
         """ユーザーデータの読み込み"""
@@ -33,40 +32,49 @@ class AlcheckCog(commands.Cog):
                 return {}
         return {}
     
-    def _save_users_data(self):
+    def _save_users_data(self, users_data: dict):
         """ユーザーデータの保存"""
         with open(self.data_file, 'w', encoding='utf-8') as f:
-            json.dump(self.users_data, f, ensure_ascii=False, indent=2)
+            json.dump(users_data, f, ensure_ascii=False, indent=2)
     
     def _get_user_data(self, user_id: str) -> Optional[dict]:
-        """指定ユーザーのデータを取得"""
-        return self.users_data.get(user_id)
+        """指定ユーザーのデータを取得（毎回ファイルから読み込み）"""
+        users_data = self._load_users_data()
+        return users_data.get(user_id)
     
     def _set_user_profile(self, user_id: str, gender: str, weight: float):
         """ユーザープロフィールを設定"""
-        if user_id not in self.users_data:
-            self.users_data[user_id] = {
+        users_data = self._load_users_data()
+        
+        if user_id not in users_data:
+            users_data[user_id] = {
                 "gender": gender,
                 "weight_kg": weight,
                 "records": []
             }
         else:
-            self.users_data[user_id]["gender"] = gender
-            self.users_data[user_id]["weight_kg"] = weight
-        self._save_users_data()
+            users_data[user_id]["gender"] = gender
+            users_data[user_id]["weight_kg"] = weight
+        
+        self._save_users_data(users_data)
     
     def _add_record(self, user_id: str, alcohol_grams: float):
         """飲酒記録を追加"""
+        users_data = self._load_users_data()
+        
         now = datetime.now(JST).isoformat()
-        self.users_data[user_id]["records"].append({
+        users_data[user_id]["records"].append({
             "timestamp": now,
             "alcohol_grams": alcohol_grams
         })
-        self._save_users_data()
+        
+        self._save_users_data(users_data)
     
     def _clean_old_records(self, user_id: str):
         """24時間以前の記録を削除"""
-        user_data = self.users_data.get(user_id)
+        users_data = self._load_users_data()
+        user_data = users_data.get(user_id)
+        
         if not user_data:
             return
         
@@ -75,7 +83,8 @@ class AlcheckCog(commands.Cog):
             record for record in user_data["records"]
             if datetime.fromisoformat(record["timestamp"]) > cutoff_time
         ]
-        self._save_users_data()
+        
+        self._save_users_data(users_data)
     
     def _calculate_bac(self, user_id: str) -> tuple[float, float]:
         """
@@ -124,8 +133,11 @@ class AlcheckCog(commands.Cog):
         
         for threshold in stage_thresholds:
             if bac >= threshold:
-                stage_data = stages[str(threshold)]
-                return stage_data["name"], stage_data["description"]
+                # キーのフォーマットを統一（小数第2位）
+                stage_key = f"{threshold:.2f}"
+                if stage_key in stages:
+                    stage_data = stages[stage_key]
+                    return stage_data["name"], stage_data["description"]
         
         # デフォルト
         return "通常", "酔いなし"
@@ -277,6 +289,85 @@ class AlcheckCog(commands.Cog):
             value=f"{total_alcohol:.1f} g",
             inline=False
         )
+        
+        # 警告表示
+        if bac >= 0.31:
+            embed.set_footer(text="⚠️ 危険な状態です。飲酒はやめ、必要に応じて医療機関に相談しましょう。")
+        elif bac >= 0.16:
+            embed.set_footer(text="⚠️ かなり酔っているようです。そろそろお開きにしませんか？")
+        
+        await interaction.response.send_message(embed=embed)
+    
+    @app_commands.command(name="alcheck-now", description="現在の血中アルコール濃度を表示します")
+    async def alcheck_now(self, interaction: discord.Interaction):
+        """現在の状態表示コマンド"""
+        user_id = str(interaction.user.id)
+        
+        # プロフィール確認
+        user_data = self._get_user_data(user_id)
+        if not user_data:
+            await interaction.response.send_message(
+                "❌ 先に `/alcheck-set` でプロフィールを設定してください",
+                ephemeral=True
+            )
+            return
+        
+        # 古い記録を削除
+        self._clean_old_records(user_id)
+        
+        # 現在のBACを計算
+        bac, total_alcohol = self._calculate_bac(user_id)
+        stage_name, stage_desc = self._get_bac_stage(bac)
+        
+        # ユーザー情報
+        gender_display = "男性" if user_data["gender"] == "male" else "女性"
+        weight = user_data["weight_kg"]
+        
+        # 結果を表示
+        embed = discord.Embed(
+            title="🍺 現在の状態",
+            color=discord.Color.blue()
+        )
+        embed.add_field(
+            name="👤 プロフィール",
+            value=f"性別: {gender_display}\n体重: {weight} kg",
+            inline=False
+        )
+        embed.add_field(
+            name="🧠 血中アルコール濃度",
+            value=f"**{bac:.3f}%**",
+            inline=True
+        )
+        embed.add_field(
+            name="🎭 判定",
+            value=f"**{stage_name}**\n{stage_desc}",
+            inline=True
+        )
+        
+        # 24時間の記録がある場合、詳細を表示
+        if user_data.get("records"):
+            embed.add_field(
+                name="⏰ 過去24時間の累計",
+                value=f"{total_alcohol:.1f} g",
+                inline=False
+            )
+            
+            # 最後の飲酒時刻を表示
+            last_record_time = datetime.fromisoformat(user_data["records"][-1]["timestamp"])
+            time_since = datetime.now(JST) - last_record_time
+            hours = int(time_since.total_seconds() // 3600)
+            minutes = int((time_since.total_seconds() % 3600) // 60)
+            embed.add_field(
+                name="🕐 最後の飲酒から",
+                value=f"{hours}時間 {minutes}分 経過",
+                inline=False
+            )
+        else:
+            embed.add_field(
+                name="📊 記録",
+                value="過去24時間の記録がありません",
+                inline=False
+            )
         
         # 警告表示
         if bac >= 0.31:
